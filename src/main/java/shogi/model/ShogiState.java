@@ -6,18 +6,29 @@ import shogi.model.utils.TwoPhaseMoveState;
 
 import java.util.ArrayList;
 
+/**
+ * The state of the shogi table, which contains the {@code pieces} {@code positions}.
+ */
 public class ShogiState implements TwoPhaseMoveState<Position> {
 
-
+    /**
+     * The board size.
+     */
     public static final int BOARD_SIZE = 9;
     private Player player;
     private final ReadOnlyObjectWrapper<Piece>[][] board;
     private Piece[][] tempBoard;
+    /**
+     * The board which contains the possible moves where the pieces can {@link #makeMove(Position, Position)} or cannot {@link #makeMove(Position, Position)} to avoid {@link #isCheckMate(boolean[][])}.
+     */
     public boolean[][] checkMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
     private boolean[][] tempCheckMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
     private ArrayList<Piece> player1Pieces;
     private ArrayList<Piece> player2Pieces;
 
+    /**
+     * The constructor of the ShogiState.
+     */
     public ShogiState() {
         this.player = Player.PLAYER_1;
         tempBoard = new Piece[9][9];
@@ -87,10 +98,20 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
         return piece;
     }
 
+    /**
+     * {@return the piece from the given position as a property}
+     * @param row the row of the position
+     * @param col the column of the position
+     */
     public ReadOnlyObjectProperty<Piece> getProperty(int row, int col) {
         return board[row][col].getReadOnlyProperty();
     }
 
+    /**
+     * {@return the piece from the given position}
+     * @param row the row of the position
+     * @param col the column of the position
+     */
     public Piece getPiece(int row, int col) {
         if (isOnBoard(new Position(row, col))) {
             return board[row][col].get();
@@ -98,7 +119,7 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
         return Piece.NONE;
     }
 
-    public Piece tempGetPiece(int row, int col) {
+    private Piece tempGetPiece(int row, int col) {
         if (isOnBoard(new Position(row, col))) {
             return tempBoard[row][col];
         }
@@ -853,9 +874,8 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
     }
 
     /**
-     * {@return whether it is checkmate or not.
-     * @param {@code checkMateBoard} the board which
-     * contains the possible spaces where the player can {@link #makeMove(Position, Position)}.
+     * {@return whether it is checkmate or not}
+     * @param checkMateBoard the board which contains the possible spaces where the player can {@link #makeMove(Position, Position)}.
      */
     public boolean isCheckMate(boolean[][] checkMateBoard) {
         switch (getNextPlayer()) {

@@ -5,10 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>ShogiFX</artifactId>
+    <artifactId>shogi-with-javaFX</artifactId>
     <version>1.0-SNAPSHOT</version>
     <description>
-        TODO
+        Shogi, also known as "将棋" in Japanese, is a two-player strategy board game that has been played in Japan for centuries.
+        It is often referred to as "Japanese chess" due to its similarities to the Western game of chess, but has unique features that make it a distinct game in its own right.
+        This project is a representation of the game in Java.
     </description>
     <developers>
         <developer>

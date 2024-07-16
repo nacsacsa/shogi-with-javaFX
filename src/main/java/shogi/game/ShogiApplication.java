@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The application that calls the FXML file.
+ */
 public class ShogiApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
