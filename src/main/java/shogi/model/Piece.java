@@ -28,5 +28,7 @@ public enum Piece {
     LIGHT_PAWN,
     DARK_PAWN,
     LIGHT_PROMOTED_PAWN,
-    DARK_PROMOTED_PAWN;
+    DARK_PROMOTED_PAWN,
+    NONE,
+    EMPTY;
 }
