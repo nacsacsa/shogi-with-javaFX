@@ -1,3 +1,4 @@
+//Created by  Peter Jeszenszky
 package shogi.model.utils;
 
 import javafx.beans.property.ReadOnlyObjectProperty;

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shogi.controllers.ShogiStateController">
+   <HBox prefHeight="1000.0" prefWidth="1000.0">
+      <children>
+         <GridPane prefHeight="30.0" prefWidth="400.0">
+            <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+               <Button mnemonicParsing="false" onAction="#addPawnPieceOnClick" prefHeight="144.0" prefWidth="181.0" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_pawn.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addLancePieceOnClick" prefHeight="144.0" prefWidth="190.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_lance.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addKnightPieceOnClick" prefHeight="144.0" prefWidth="151.0" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_knight.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addSilverPieceOnClick" prefHeight="158.0" prefWidth="266.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_silver.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addGoldPieceOnClick" prefHeight="198.0" prefWidth="323.0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_gold.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addBishopPieceOnClick" prefHeight="154.0" prefWidth="246.0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_bishop.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Button mnemonicParsing="false" onAction="#addRookPieceOnClick" prefHeight="163.0" prefWidth="309.0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/dark_rook.png"/>
+                     </ImageView>
+                  </graphic></Button>
+               <Label fx:id="darkPawnNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+               <Label fx:id="darkKnightNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+               <Label fx:id="darkSilverNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+               <Label fx:id="darkGoldNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+               <Label fx:id="darkBishopNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+               <Label fx:id="darkRookNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="TOP" />
+               <Label fx:id="darkLanceNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+            </children>
+         </GridPane>
+               <GridPane fx:id="board" prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../ui.css">
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   </rowConstraints>
+               </GridPane>
+         <GridPane layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="400.0">
+            <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+               <Button mnemonicParsing="false" onAction="#addRookPieceOnClick" prefHeight="144.0" prefWidth="181.0" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_rook.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addBishopPieceOnClick" prefHeight="144.0" prefWidth="190.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_bishop.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addGoldPieceOnClick" prefHeight="144.0" prefWidth="151.0" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_gold.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addSilverPieceOnClick" prefHeight="158.0" prefWidth="266.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_silver.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addKnightPieceOnClick" prefHeight="198.0" prefWidth="323.0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_knight.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addLancePieceOnClick" prefHeight="154.0" prefWidth="246.0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_lance.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#addPawnPieceOnClick" prefHeight="163.0" prefWidth="309.0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                  <graphic>
+                     <ImageView fitHeight="138.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../assets/light_pawn.png"/>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Label fx:id="lightRookNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
+               <Label fx:id="lightKnightNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+               <Label fx:id="LightGoldNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+               <Label fx:id="lightSilverNumberLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM" />
+               <Label fx:id="lightLanceLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
+               <Label fx:id="lightPawnLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="BOTTOM" />
+               <Label fx:id="lightBishopLabel" text="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            </children>
+         </GridPane>
+      </children>
+   </HBox>
+
+</AnchorPane>

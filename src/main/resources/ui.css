@@ -1,0 +1,21 @@
+.square {
+    -fx-border-style: solid;
+    -fx-background-color: #e3b240;
+}
+
+.square.selected {
+    -fx-border-width: 2;
+    -fx-background-color: #baca44;
+}
+
+.square.checkMate, {
+    -fx-background-color: red;
+}
+
+.square.lastMoveTo {
+    -fx-background-color: #baca44;
+}
+
+.square.possibleMoves, .square.possibleMoves, .square.lastMoveTo.possibleMoves {
+    -fx-background-color: grey;
+}

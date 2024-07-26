@@ -140,6 +140,13 @@ public class ShogiStateTest {
         initial.makeMove(new Position(6, 1), new Position(5, 1));
         assertEquals(State.Player.PLAYER_2, initial.getNextPlayer());
     }
+    @Test
+    public void getNextPlayerTest4() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        initial.makeMove(new Position(0, 0), new Position(2, 0));
+        initial.putPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 0));
+        assertEquals(State.Player.PLAYER_2, initial.getNextPlayer());
+    }
 
     @Test
     public void getStatusTest1() {
@@ -165,13 +172,13 @@ public class ShogiStateTest {
 
     @Test
     public void isCheckMateTest1() {
-        assertFalse(initial.isCheckMate(initial.checkMateBoard));
-        assertFalse(inGameState.isCheckMate(inGameState.checkMateBoard));
+        assertFalse(initial.isCheckMate(initial.getCheckMateBoard()));
+        assertFalse(inGameState.isCheckMate(inGameState.getCheckMateBoard()));
     }
     @Test
     public void isCheckMateTest2() {
-        assertTrue(inCheckMateState.isCheckMate(inCheckMateState.checkMateBoard));
-        assertTrue(inGameOverState.isCheckMate(inGameOverState.checkMateBoard));
+        assertTrue(inCheckMateState.isCheckMate(inCheckMateState.getCheckMateBoard()));
+        assertTrue(inGameOverState.isCheckMate(inGameOverState.getCheckMateBoard()));
     }
 
     @Test
@@ -375,5 +382,96 @@ public class ShogiStateTest {
         assertTrue(inCheckMateState.isLegalMove(new Position(0, 5), new Position(1, 5)));
         assertTrue(inCheckMateState.isLegalMove(new Position(0, 6), new Position(1, 5)));
         assertTrue(inCheckMateState.isLegalMove(new Position(0, 7), new Position(2, 6)));
+    }
+
+    @Test
+    public void isLegalToPutPieceToBoardTest1() {
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_GOLD, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_SILVER, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_ROOK, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_BISHOP, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.DARK_BISHOP, new Position(4, 0)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_LANCE, new Position(4, 0)));
+    }
+    @Test
+    public void isLegalToPutPieceToBoardTest2() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        initial.makeMove(new Position(0, 0), new Position(2, 0));
+        assertTrue(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 0)));
+        assertTrue(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(4, 0)));
+        assertTrue(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(5, 0)));
+        assertTrue(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(6, 0)));
+        assertTrue(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(7, 0)));
+    }
+    @Test
+    public void isLegalToPutPieceToBoardTest3() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        initial.makeMove(new Position(0, 0), new Position(2, 0));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 1)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 2)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 3)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 4)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 5)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 6)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 7)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 8)));
+        assertFalse(initial.isLegalToPutPieceToBoard(Piece.LIGHT_PAWN, new Position(2, 0)));
+    }
+
+    @Test
+    public void putPieceToBoardTest1() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        initial.makeMove(new Position(0, 0), new Position(2, 0));
+        initial.putPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 0));
+        assertEquals(Piece.LIGHT_PAWN, initial.getPiece(3, 0));
+    }
+    @Test
+    public void putPieceToBoardTest2() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        initial.makeMove(new Position(0, 0), new Position(2, 0));
+        initial.putPieceToBoard(Piece.LIGHT_PAWN, new Position(3, 0));
+        initial.putPieceToBoard(Piece.DARK_PAWN, new Position(5, 0));
+        assertEquals(Piece.DARK_PAWN, initial.getPiece(5, 0));
+    }
+
+    @Test
+    public void playerPiecesListTest1() {
+        initial.makeMove(new Position(6, 0), new Position(2, 0));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_PAWN));
+
+        initial.makeMove(new Position(2, 1), new Position(6, 1));
+        assertTrue(initial.getPlayer2Pieces().contains(Piece.DARK_PAWN));
+    }
+    @Test
+    public void playerPiecesListTest2() {
+        initial.makeMove(new Position(6, 0), new Position(1, 1));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_ROOK));
+    }
+    @Test
+    public void playerPiecesListTest3() {
+        initial.makeMove(new Position(6, 0), new Position(0, 0));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_LANCE));
+    }
+    @Test
+    public void playerPiecesListTest4() {
+        initial.makeMove(new Position(6, 0), new Position(0, 1));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_KNIGHT));
+    }
+    @Test
+    public void playerPiecesListTest5() {
+        initial.makeMove(new Position(6, 0), new Position(0, 2));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_SILVER));
+    }
+    @Test
+    public void playerPiecesListTest6() {
+        initial.makeMove(new Position(6, 0), new Position(0, 3));
+        assertTrue(initial.getPlayer1Pieces().contains(Piece.LIGHT_GOLD));
+    }
+    @Test
+    public void playerPiecesListTest7() {
+        initial.makeMove(new Position(6, 0), new Position(1, 0));
+        initial.makeMove(new Position(0, 0), new Position(1, 0));
+        assertTrue(initial.getPlayer2Pieces().contains(Piece.DARK_PAWN));
     }
 }

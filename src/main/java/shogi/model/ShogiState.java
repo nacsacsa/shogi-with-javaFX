@@ -2,14 +2,14 @@ package shogi.model;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import shogi.model.utils.TwoPhaseMoveState;
+import shogi.model.utils.ChessTypeGameState;
 
 import java.util.ArrayList;
 
 /**
  * The state of the shogi table, which contains the {@code pieces} {@code positions}.
  */
-public class ShogiState implements TwoPhaseMoveState<Position> {
+public class ShogiState implements ChessTypeGameState<Position> {
 
     /**
      * The board size.
@@ -21,8 +21,8 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
     /**
      * The board which contains the possible moves where the pieces can {@link #makeMove(Position, Position)} or cannot {@link #makeMove(Position, Position)} to avoid {@link #isCheckMate(boolean[][])}.
      */
-    public boolean[][] checkMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
-    private boolean[][] tempCheckMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
+    private boolean[][] checkMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
+    private final boolean[][] tempCheckMateBoard = new boolean[BOARD_SIZE][BOARD_SIZE];
     private ArrayList<Piece> player1Pieces;
     private ArrayList<Piece> player2Pieces;
 
@@ -50,6 +50,8 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
         }
         createCheckMate(checkMateBoard ,board, player);
         checkMateReset(tempCheckMateBoard);
+        player1Pieces = new ArrayList<>();
+        player2Pieces = new ArrayList<>();
     }
 
     private Piece darkBackLineFill(int col) {
@@ -96,6 +98,18 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
             default -> piece = Piece.EMPTY;
         }
         return piece;
+    }
+
+    public ArrayList<Piece> getPlayer1Pieces() {
+        return player1Pieces;
+    }
+
+    public ArrayList<Piece> getPlayer2Pieces() {
+        return player2Pieces;
+    }
+
+    public boolean[][] getCheckMateBoard() {
+        return checkMateBoard;
     }
 
     /**
@@ -874,10 +888,12 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
     }
 
     /**
-     * {@return whether it is checkmate or not}
-     * @param checkMateBoard the board which contains the possible spaces where the player can {@link #makeMove(Position, Position)}.
+     * {@return if the {@code player} king is in checkmate or not}
+     *
+     * @param checkMateTable the table which contains the enemy player's pieces hit radius
      */
-    public boolean isCheckMate(boolean[][] checkMateBoard) {
+    @Override
+    public boolean isCheckMate(boolean[][] checkMateTable) {
         switch (getNextPlayer()) {
             case PLAYER_1 -> {
                 return isKingInCheckMate(Piece.LIGHT_KING, checkMateBoard);
@@ -924,6 +940,63 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
     }
 
     /**
+     * {@return if it legal or not to put a {@code piece} from the player's reserve}
+     * @param piece The {@code piece} that the {@code player} want to put on the {@code board}
+     * @param to The {@code position} where the {@code piece} will be placed
+     */
+    public boolean isLegalToPutPieceToBoard(Piece piece, Position to) {
+        return isPlayerHaveThePiece(piece) && isEmpty(to) && isPawnCanPlaced(piece, to);
+    }
+
+    private boolean isPlayerHaveThePiece(Piece piece) {
+        switch (getNextPlayer()) {
+            case PLAYER_1 -> {
+                return player1Pieces.contains(piece);
+            }
+            case PLAYER_2 -> {
+                return player2Pieces.contains(piece);
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    private boolean isPawnCanPlaced(Piece piece, Position to) {
+        if (!(piece == Piece.LIGHT_PAWN || piece == Piece.DARK_PAWN)) {
+            return true;
+        }
+        boolean isTheRowEmpty = true;
+        for (var col = 0; col < BOARD_SIZE; col++) {
+            for (var row = 0; row < BOARD_SIZE; row++) {
+                if (getPiece(row, col) == piece) {
+                    isTheRowEmpty = false;
+                    break;
+                }
+            }
+            if (col == to.col() && isTheRowEmpty) {
+                return true;
+            }
+            isTheRowEmpty = false;
+        }
+        return false;
+    }
+
+    /**
+     * Put a {@code piece} to the {@code board} from the player's rooster.
+     * @param piece the {@code piece} that the {@code player} want to place to the {@code board}
+     * @param to the {@code position} where the {@code player} put the {@code piece}
+     */
+    public void putPieceToBoard(Piece piece, Position to) {
+        board[to.row()][to.col()].set(piece);
+        switch (getNextPlayer()) {
+            case PLAYER_1 -> player1Pieces.remove(piece);
+            case PLAYER_2 -> player2Pieces.remove(piece);
+        }
+        player = player.opponent();
+    }
+
+    /**
      * Applies the move provided to the state. This method should be called if
      * and only if {@link #isLegalMove(Position, Position)} returns {@code true}.
      *
@@ -932,6 +1005,9 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public void makeMove(Position from, Position to) {
+        if (!isEmpty(to)) {
+            addPieceToPlayerList(getPiece(to.row(), to.col()));
+        }
         if (isEnemyTerritory(to)) {
             board[to.row()][to.col()].set(upgradePiece(from));
         }
@@ -941,6 +1017,63 @@ public class ShogiState implements TwoPhaseMoveState<Position> {
         board[from.row()][from.col()].set(Piece.EMPTY);
         player = player.opponent();
         createCheckMate(checkMateBoard, board, player);
+    }
+
+    private void addPieceToPlayerList(Piece piece) {
+        switch (getNextPlayer()) {
+            case PLAYER_1 -> player1Pieces.add(turnIntoEnemyPiece(piece));
+            case PLAYER_2 -> player2Pieces.add(turnIntoEnemyPiece(piece));
+        }
+    }
+
+    private Piece turnIntoEnemyPiece(Piece piece) {
+        switch (piece) {
+            case DARK_PAWN, DARK_PROMOTED_PAWN -> {
+                return Piece.LIGHT_PAWN;
+            }
+            case LIGHT_PAWN, LIGHT_PROMOTED_PAWN -> {
+                return Piece.DARK_PAWN;
+            }
+            case DARK_KNIGHT, DARK_PROMOTED_KNIGHT -> {
+                return Piece.LIGHT_KNIGHT;
+            }
+            case LIGHT_KNIGHT, LIGHT_PROMOTED_KNIGHT -> {
+                return Piece.DARK_KNIGHT;
+            }
+            case DARK_LANCE, DARK_PROMOTED_LANCE -> {
+                return Piece.LIGHT_LANCE;
+            }
+            case LIGHT_LANCE, LIGHT_PROMOTED_LANCE -> {
+                return Piece.DARK_LANCE;
+            }
+            case DARK_SILVER, DARK_PROMOTED_SILVER -> {
+                return Piece.LIGHT_SILVER;
+            }
+            case LIGHT_SILVER, LIGHT_PROMOTED_SILVER -> {
+                return Piece.DARK_SILVER;
+            }
+            case DARK_BISHOP, DARK_PROMOTED_BISHOP -> {
+                return Piece.LIGHT_BISHOP;
+            }
+            case LIGHT_BISHOP, LIGHT_PROMOTED_BISHOP -> {
+                return Piece.DARK_BISHOP;
+            }
+            case DARK_GOLD -> {
+                return Piece.LIGHT_GOLD;
+            }
+            case LIGHT_GOLD -> {
+                return Piece.DARK_GOLD;
+            }
+            case DARK_ROOK, DARK_PROMOTED_ROOK -> {
+                return Piece.LIGHT_ROOK;
+            }
+            case LIGHT_ROOK, LIGHT_PROMOTED_ROOK -> {
+                return Piece.DARK_ROOK;
+            }
+            default -> {
+                return Piece.EMPTY;
+            }
+        }
     }
 
     private boolean isEnemyTerritory(Position to) {
