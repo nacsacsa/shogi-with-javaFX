@@ -99,9 +99,11 @@ public class ShogiStateController {
                     gameOverAlertAndExit();
                 }
                 colorCheckMate();
+                notShowWhereIsPossibleToPutPiece();
             }
             else {
                 isButtonPressed = false;
+                notShowWhereIsPossibleToPutPiece();
             }
         }
         else {
